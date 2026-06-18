@@ -27,13 +27,15 @@ function NoteSelector({ selectedNote, onSelect, notation, onNotationChange }) {
   };
 
   return (
-    <div className="piano">
+    <div className="piano" role="group" aria-label="Piano note selector">
       <div className="white-keys">
         {WHITE_KEYS.map(({ note }) => (
           <button
             key={note}
             className={`white-key ${selectedNote === note ? 'selected' : ''}`}
             onClick={() => handleWhiteClick(note)}
+            aria-label={`Note ${note}`}
+            aria-current={selectedNote === note ? 'true' : undefined}
           >
             {note}
           </button>
@@ -49,12 +51,16 @@ function NoteSelector({ selectedNote, onSelect, notation, onNotationChange }) {
             <button
               className={`half-top ${selectedNote === note && notation === 'sharp' ? 'selected' : ''}`}
               onClick={() => handleBlackClick(note, 'sharp')}
+              aria-label={`Note ${sharp}`}
+              aria-current={selectedNote === note && notation === 'sharp' ? 'true' : undefined}
             >
               {sharp}
             </button>
             <button
               className={`half-bot ${selectedNote === note && notation === 'flat' ? 'selected' : ''}`}
               onClick={() => handleBlackClick(note, 'flat')}
+              aria-label={`Note ${flat}`}
+              aria-current={selectedNote === note && notation === 'flat' ? 'true' : undefined}
             >
               {flat}
             </button>

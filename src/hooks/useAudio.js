@@ -1,8 +1,10 @@
-import { useCallback, useRef } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import { CHROMATIC } from '../data/notes';
 
 export default function useAudio() {
   const ctxRef = useRef(null);
+  const [playing, setPlaying] = useState(false);
+  const timeoutRef = useRef(null);
 
   const getContext = useCallback(() => {
     if (!ctxRef.current) {
@@ -18,6 +20,12 @@ export default function useAudio() {
     const ctx = getContext();
     const now = ctx.currentTime;
     const rootIndex = CHROMATIC.indexOf(rootNote);
+    const noteCount = intervals.length;
+    const totalDuration = noteCount * 0.12 + 0.5;
+
+    setPlaying(true);
+    clearTimeout(timeoutRef.current);
+    timeoutRef.current = setTimeout(() => setPlaying(false), totalDuration * 1000);
 
     intervals.forEach((interval, i) => {
       const osc = ctx.createOscillator();
@@ -37,5 +45,5 @@ export default function useAudio() {
     });
   }, [getContext]);
 
-  return { playChord };
+  return { playChord, playing };
 }
